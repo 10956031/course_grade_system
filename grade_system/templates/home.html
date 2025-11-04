@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}成績系統 - 首頁{% endblock %}
+
+{% block content %}
+<h1>成績系統</h1>
+<p>歡迎使用學生修課分數計算系統</p>
+
+<div style="margin: 30px 0;">
+    <h2>功能選單</h2>
+    <div>
+        <a href="{% url 'course_list' %}" class="btn">查看我的課程</a>
+        <a href="{% url 'add_course' %}" class="btn">新增課程</a>
+        <a href="{% url 'manage_enrollment' %}" class="btn">加選/退選課程</a>
+    </div>
+</div>
+
+<div style="background: #f8f9fa; padding: 20px; border-radius: 5px;">
+    <h3>系統說明</h3>
+    <ul>
+        <li>查看目前修習的課程及分數</li>
+        <li>查看課程詳細資訊</li>
+        <li>新增課程到系統</li>
+        <li>加選或退選課程</li>
+    </ul>
+</div>
+{% endblock %}

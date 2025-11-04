@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.course_name }} - 詳細資訊{% endblock %}
+
+{% block content %}
+<h1>{{ course.course_name }}</h1>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+    <div>
+        <h3>課程資訊</h3>
+        <p><strong>課號:</strong> {{ course.course_id }}</p>
+        <p><strong>課名:</strong> {{ course.course_name }}</p>
+        <p><strong>任課老師:</strong> {{ course.teacher }}</p>
+        <p><strong>學分數:</strong> {{ course.credit }}</p>
+    </div>
+    
+    <div>
+        <h3>我的成績</h3>
+        <p><strong>期中考分數:</strong> {{ student_course.midterm_score|default:"尚未輸入" }}</p>
+        <p><strong>期末考分數:</strong> {{ student_course.final_score|default:"尚未輸入" }}</p>
+        <p><strong>平均分數:</strong> {{ student_course.get_total_score|default:"尚未計算" }}</p>
+    </div>
+</div>
+
+<h3>修課學生名單</h3>
+{% if enrolled_students %}
+<table>
+    <thead>
+        <tr>
+            <th>學生姓名</th>
+            <th>期中考分數</th>
+            <th>期末考分數</th>
+            <th>平均分數</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for enrollment in enrolled_students %}
+        <tr>
+            <td>{{ enrollment.student.username }}</td>
+            <td>{{ enrollment.midterm_score|default:"尚未輸入" }}</td>
+            <td>{{ enrollment.final_score|default:"尚未輸入" }}</td>
+            <td>{{ enrollment.get_total_score|default:"尚未計算" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>目前沒有學生修習這門課程。</p>
+{% endif %}
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'course_list' %}" class="btn">返回課程列表</a>
+    <a href="{% url 'home' %}" class="btn">返回首頁</a>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}我的課程{% endblock %}
+
+{% block content %}
+<h1>我的課程</h1>
+<p>學生: {{ student.username }}</p>
+
+{% if courses %}
+<table>
+    <thead>
+        <tr>
+            <th>課名</th>
+            <th>課號</th>
+            <th>任課老師</th>
+            <th>期中考分數</th>
+            <th>期末考分數</th>
+            <th>平均分數</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in courses %}
+        <tr>
+            <td><a href="{% url 'course_detail' item.course.course_id %}">{{ item.course.course_name }}</a></td>
+            <td>{{ item.course.course_id }}</td>
+            <td>{{ item.course.teacher }}</td>
+            <td>{{ item.midterm_score|default:"尚未輸入" }}</td>
+            <td>{{ item.final_score|default:"尚未輸入" }}</td>
+            <td>{{ item.average_score|default:"尚未計算" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="text-align: right; font-size: 1.2em; font-weight: bold;">
+    總平均分數: {{ overall_avg }}
+</div>
+{% else %}
+<p>目前尚未修習任何課程。</p>
+{% endif %}
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'manage_enrollment' %}" class="btn">加選/退選課程</a>
+    <a href="{% url 'home' %}" class="btn">返回首頁</a>
+</div>
+{% endblock %}

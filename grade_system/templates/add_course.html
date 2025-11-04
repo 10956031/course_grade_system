@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}新增課程{% endblock %}
+
+{% block content %}
+<h1>新增課程</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="{{ form.course_id.id_for_label }}">課號:</label>
+        {{ form.course_id }}
+        {{ form.course_id.errors }}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.course_name.id_for_label }}">課名:</label>
+        {{ form.course_name }}
+        {{ form.course_name.errors }}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.teacher.id_for_label }}">任課老師:</label>
+        {{ form.teacher }}
+        {{ form.teacher.errors }}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.credit.id_for_label }}">學分數:</label>
+        {{ form.credit }}
+        {{ form.credit.errors }}
+    </div>
+    
+    <button type="submit" class="btn">新增課程</button>
+    <a href="{% url 'course_list' %}" class="btn">取消</a>
+</form>
+{% endblock %}
