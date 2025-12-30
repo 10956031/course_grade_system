@@ -1,1 +1,1 @@
-default_app_config = 'courses.apps.CoursesConfig'
+default_app_config = 'grade_system.courses.apps.CoursesConfig'

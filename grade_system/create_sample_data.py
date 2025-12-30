@@ -10,7 +10,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grade_system.settings')
 django.setup()
 
 from django.contrib.auth.models import User
-from courses.models import Course, StudentCourse, CourseComment, UserProfile
+from grade_system.courses.models import Course, StudentCourse, CourseComment, UserProfile
 
 def create_sample_data():
     print("開始建立範例資料...")
