@@ -1,95 +1,71 @@
+<!-- templates/base.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}成績系統{% endblock %}</title>
-    <style>
-        body {
-            font-family: 'Microsoft JhengHei', Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        nav {
-            background: #333;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            padding: 5px 10px;
-        }
-        nav a:hover {
-            background: #555;
-            border-radius: 3px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 5px;
-        }
-        .btn:hover {
-            background: #0056b3;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <a href="{% url 'home' %}">首頁</a>
-            <a href="{% url 'course_list' %}">課程列表</a>
-            <a href="{% url 'add_course' %}">新增課程</a>
-            <a href="{% url 'manage_enrollment' %}">加選/退選</a>
-            {% if user.is_authenticated %}
-                <span style="color: white; float: right;">歡迎, {{ user.username }}</span>
-            {% endif %}
-        </nav>
-        
-        {% block content %}
-        {% endblock %}
-    </div>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="navbar-brand">成績系統</a>
+            
+            <div class="navbar-menu">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'home' %}" class="nav-link"><i class="fas fa-home"></i> 首頁</a>
+                    
+                    {% if user_role == 'student' %}
+                        <a href="{% url 'course_list' %}" class="nav-link"><i class="fas fa-book"></i> 我的課程</a>
+                        <a href="{% url 'manage_enrollment' %}" class="nav-link"><i class="fas fa-plus-circle"></i> 加選/退選</a>
+                    {% elif user_role == 'teacher' %}
+                        <a href="{% url 'teacher_courses' %}" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> 我的授課</a>
+                        <a href="{% url 'add_course' %}" class="nav-link"><i class="fas fa-plus"></i> 新增課程</a>
+                    {% elif user_role == 'admin' %}
+                        <a href="/admin/" class="nav-link"><i class="fas fa-cog"></i> 管理後台</a>
+                    {% endif %}
+                    
+                    <div class="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">
+                            <i class="fas fa-user"></i> {{ user.username }}
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="{% url 'profile' %}"><i class="fas fa-user-edit"></i> 個人資料</a>
+                            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> 登出</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> 登入</a>
+                    <a href="{% url 'register' %}" class="nav-link"><i class="fas fa-user-plus"></i> 註冊</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+                <button type="button" class="close" onclick="this.parentElement.style.display='none'">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 成績系統. 保留所有權利.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
