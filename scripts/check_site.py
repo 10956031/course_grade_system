@@ -19,22 +19,34 @@ from django.test import Client
 
 c = Client()
 try:
-    paths = ['/', '/courses/', '/accounts/login/']
-    for path in paths:
+    # 先測試公開頁面
+    for path in ['/', '/courses/', '/accounts/login/', '/courses/CS101/']:
         r = c.get(path, follow=True)
         print('\nGET', path, '->', r.status_code)
         print('TEMPLATES:', [t.name for t in getattr(r, 'templates', [])])
         print('LENGTH', len(r.content))
-        print('BODY PREVIEW:\n', r.content.decode('utf-8')[:1000])
+        print('BODY PREVIEW:\n', r.content.decode('utf-8')[:800])
 
-    # 先登入學生，再取用需要登入的頁面
+    # 使用學生登入並測試學生頁面
     logged_in = c.login(username='student1', password='student123')
     print('\nLOGIN student1 ->', logged_in)
-    r = c.get('/courses/list/', follow=True)
-    print('GET /courses/list/ ->', r.status_code)
-    print('TEMPLATES:', [t.name for t in getattr(r, 'templates', [])])
-    print('LENGTH', len(r.content))
-    print('BODY PREVIEW:\n', r.content.decode('utf-8')[:1000])
+    for path in ['/courses/list/', '/courses/enroll/', '/courses/course/CS101/comment/add/']:
+        r = c.get(path, follow=True)
+        print('\nGET', path, '->', r.status_code)
+        print('TEMPLATES:', [t.name for t in getattr(r, 'templates', [])])
+        print('LENGTH', len(r.content))
+        print('BODY PREVIEW:\n', r.content.decode('utf-8')[:800])
+
+    # 使用教師登入並測試教師頁面
+    c.logout()
+    logged_in = c.login(username='teacher1', password='teacher123')
+    print('\nLOGIN teacher1 ->', logged_in)
+    for path in ['/courses/teacher/', '/courses/add/', '/courses/course/CS101/grade/']:
+        r = c.get(path, follow=True)
+        print('\nGET', path, '->', r.status_code)
+        print('TEMPLATES:', [t.name for t in getattr(r, 'templates', [])])
+        print('LENGTH', len(r.content))
+        print('BODY PREVIEW:\n', r.content.decode('utf-8')[:800])
 
 except TemplateDoesNotExist as e:
     print('TemplateDoesNotExist:', e)
