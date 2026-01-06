@@ -1,1 +1,22 @@
-<!-- REMOVED: profile template reverted to prior state -->
+{% extends 'base.html' %}
+
+{% block title %}個人資料{% endblock %}
+
+{% block content %}
+<h1>個人資料</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>帳號資訊</h3>
+    {{ user_form.as_p }}
+
+    <h3>個人檔案</h3>
+    {{ profile_form.as_p }}
+
+    <button type="submit" class="btn">儲存</button>
+</form>
+
+<div style="margin-top: 20px;">
+    <p>已修課總數: {{ total_courses }}</p>
+    <p>平均分數: {{ avg_score }}</p>
+</div>
+{% endblock %}

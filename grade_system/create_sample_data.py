@@ -2,9 +2,9 @@ import os
 import django
 import sys
 
-# 添加專案目錄到 Python 路徑
+# 添加專案目錄到 Python 路徑（把專案根目錄加入，以便能 import grade_system）
 project_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(project_dir)
+sys.path.append(os.path.dirname(project_dir))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'grade_system.settings')
 django.setup()
@@ -87,8 +87,10 @@ def create_sample_data():
             user.profile.student_id = student_data['student_id']
             user.profile.department = student_data['department']
             user.profile.save()
-            student_users.append(user)
             print(f"建立學生: {user.username}")
+        else:
+            print(f"學生已存在: {user.username}")
+        student_users.append(user)
     
     # 建立課程
     courses_data = [
@@ -121,9 +123,11 @@ def create_sample_data():
             course_id=course_data['course_id'],
             defaults=course_data
         )
+        courses.append(course)
         if created:
-            courses.append(course)
             print(f"建立課程: {course.course_name}")
+        else:
+            print(f"課程已存在: {course.course_name}")
     
     # 讓學生修課
     for student in student_users:

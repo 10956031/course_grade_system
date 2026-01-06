@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}註冊{% endblock %}
+{% block title %}編輯留言{% endblock %}
 
 {% block content %}
-<h1>註冊新帳號</h1>
+<h1>編輯留言</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">註冊</button>
+    <button type="submit" class="btn">更新留言</button>
 </form>
 {% endblock %}

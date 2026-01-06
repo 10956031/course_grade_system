@@ -1,1 +1,12 @@
-<!-- REMOVED: login template reverted to prior state -->
+{% extends 'base.html' %}
+
+{% block title %}登入{% endblock %}
+
+{% block content %}
+<h1>登入</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">登入</button>
+</form>
+{% endblock %}

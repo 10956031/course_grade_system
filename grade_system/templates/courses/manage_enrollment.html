@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}加選/退選課程{% endblock %}
+
+{% block content %}
+<h1>加選/退選課程</h1>
+
+<h3>已加選</h3>
+{% if enrolled_courses %}
+<ul>
+    {% for sc in enrolled_courses %}
+    <li>{{ sc.course.course_name }} - <form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="course" value="{{ sc.course.id }}"><input type="hidden" name="action" value="drop"><button class="btn">退選</button></form></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>尚未加選任何課程。</p>
+{% endif %}
+
+<h3>可加選課程</h3>
+<form method="post">
+    {% csrf_token %}
+    <select name="course">
+        {% for c in available_courses %}
+        <option value="{{ c.id }}">{{ c.course_name }} ({{ c.course_id }})</option>
+        {% endfor %}
+    </select>
+    <input type="hidden" name="action" value="enroll">
+    <button type="submit" class="btn">加選</button>
+</form>
+{% endblock %}

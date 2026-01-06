@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}我的授課{% endblock %}
+
+{% block content %}
+<h1>我的授課</h1>
+
+{% if courses %}
+<table>
+    <thead>
+        <tr>
+            <th>課名</th>
+            <th>課號</th>
+            <th>學生數</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in courses %}
+        <tr>
+            <td>{{ c.course_name }}</td>
+            <td>{{ c.course_id }}</td>
+            <td>{{ c.student_count }}</td>
+            <td><a href="{% url 'grade_management' c.course_id %}">管理成績</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>目前沒有授課課程。</p>
+{% endif %}
+
+{% endblock %}
